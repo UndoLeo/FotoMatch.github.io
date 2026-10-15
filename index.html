@@ -7,7 +7,7 @@
 <title>FotoMatch</title>
 <meta name="description" content="Гость сканирует QR, присылает селфи в Telegram и получает только свои фото с мероприятия. Под брендом агентства, фото на вашем Яндекс Диске, серверы в РФ.">
 <meta property="og:title" content="Одно селфи — и гость получает свои фото">
-<meta property="og:description" content="Telegram-бот выдаёт каждому гостю только его фото с мероприятия. Под вашим брендом, с согласием гостя и автоудалением данных. Первый пилот — бесплатно.">
+<meta property="og:description" content="Telegram-бот выдаёт каждому гостю только его фото с мероприятия. Под вашим брендом, с согласием гостя и автоудалением данных. Первое мероприятие — со скидкой 50%.">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://undoleo.github.io/FotoMatch.github.io/video/fotomatch-promo-poster.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -202,6 +202,7 @@ tr:last-child td:first-child{color:var(--marker)}
 
 /* faq */
 .faq{display:grid;grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr);gap:clamp(32px,6vw,90px)}
+.faq .sec-head{align-content:start}
 .faq details{border-bottom:1px solid var(--rule)}
 .faq details:first-child{border-top:1px solid var(--rule)}
 .faq summary{list-style:none;cursor:pointer;padding:20px 40px 20px 0;font-weight:600;font-size:17px;position:relative}
@@ -221,6 +222,37 @@ tr:last-child td:first-child{color:var(--marker)}
 @media (max-width:900px){.final .wrap{grid-template-columns:minmax(0,1fr)}}
 footer{border-top:1px solid var(--rule);padding-block:28px 40px;font-size:13.5px;color:var(--ink-2)}
 footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 28px}
+
+/* pricing extras */
+.plan .first{margin-top:10px;padding-top:10px;border-top:1px dashed var(--rule);font:500 12.5px/1.4 var(--mono);color:var(--marker)}
+.pay-note{margin-top:22px;max-width:72ch;color:var(--ink-2);font-size:15.5px}
+.flow{list-style:none;margin:6px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px 6px;counter-reset:fl}
+.flow li{counter-increment:fl;display:inline-flex;align-items:center;gap:8px;font-size:14.5px;padding:7px 12px;border:1px solid var(--rule);border-radius:999px;background:var(--card)}
+.flow li::before{content:counter(fl,decimal-leading-zero);font:500 11.5px/1 var(--mono);color:var(--marker)}
+@media (max-width:520px){.top .btn .lg{display:none}}
+
+/* motion: 3D tilt + float on the hero sheet, floating prints, reveal, plan lift. Transform/opacity only. */
+.hero .sheet-wrap{perspective:1400px;animation:sheetFloat 9s ease-in-out infinite}
+@keyframes sheetFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-8px,0)}}
+.sheet{transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) rotate(-1.2deg);transition:transform .5s cubic-bezier(.2,.7,.2,1);will-change:transform}
+#how .wrap{position:relative}
+.drift{position:absolute;top:-10px;right:var(--gutter-r);width:300px;height:250px;perspective:900px;pointer-events:none;display:none}
+.drift .dp{position:absolute;width:var(--w);left:var(--x);top:var(--y);transform:translate3d(0,var(--py,0px),var(--z)) rotate(var(--r));box-shadow:0 18px 30px -18px rgba(0,0,0,.5);border:5px solid var(--print-edge);border-bottom-width:12px;border-radius:3px;background:var(--print-edge);will-change:transform}
+.drift .dp svg.print{display:block;width:100%;height:auto}
+.drift .dp .ring{position:absolute;left:-14%;top:-18%;width:128%;height:130%;overflow:visible}
+.drift .dp .ring path{animation:none}
+@media (min-width:1080px){.drift{display:block}}
+.plan{transition:transform .3s cubic-bezier(.2,.7,.2,1),box-shadow .3s ease,border-color .3s ease}
+.plans .plan:not(.custom):hover,.plans .plan:focus-within{transform:perspective(900px) translate3d(0,-6px,0) rotateX(4deg);box-shadow:0 22px 40px -26px rgba(0,0,0,.45);border-color:var(--marker)}
+.js-motion .rv{opacity:0;transform:translate3d(0,16px,0)}
+.js-motion .rv.in{opacity:1;transform:none;transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--d,0s)}
+@media (prefers-reduced-motion:reduce){
+  .hero .sheet-wrap{animation:none}
+  .sheet{transform:rotate(-1.2deg);transition:none}
+  .drift .dp{transform:rotate(var(--r))}
+  .plans .plan:not(.custom):hover,.plans .plan:focus-within{transform:none}
+  .js-motion .rv{opacity:1;transform:none}
+}
 </style>
 </head>
 <body>
@@ -233,7 +265,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 
     <nav class="nav" aria-label="Разделы">
       <a href="#how">Как работает</a><a href="#demo">Демо</a><a href="#safety">Безопасность</a><a href="#pricing">Тарифы</a><a href="#faq">Вопросы</a>
     </nav>
-    <a class="btn primary" href="#contact">Пилот бесплатно</a>
+    <a class="btn primary" href="#pricing">Первое<span class="lg"> мероприятие</span> −50%</a>
   </div>
 </header>
 
@@ -245,7 +277,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 
         <h1>Одно селфи — и гость получает <span class="circ">свои фото<svg viewBox="0 0 200 60" preserveAspectRatio="none" aria-hidden="true"><path d="M14 34C10 14 70 4 120 6s78 10 74 28-60 24-112 22S6 48 18 24"/></svg></span></h1>
         <p class="lead">Гость сканирует QR на площадке, присылает селфи и получает только кадры с собой в день мероприятия. Под вашим брендом, без приложений, с согласием и автоудалением данных.</p>
         <div class="cta-row">
-          <a class="btn primary" href="#contact">Провести пилот бесплатно <span class="arr">→</span></a>
+          <a class="btn primary" href="#contact">Обсудить мероприятие <span class="arr">→</span></a>
           <a class="btn" href="https://t.me/FotoMatchTest_bot" target="_blank" rel="noopener">Попробовать демо-бота</a>
         </div>
         <div class="facts">
@@ -254,10 +286,12 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 
           <div><b>Серверы в РФ</b>шаблон лица удаляется через 30 дней</div>
         </div>
       </div>
+      <div class="sheet-wrap">
       <div class="sheet" aria-label="Обзорный лист кадров мероприятия: три кадра с гостем обведены красным">
         <div class="sheet-head"><span>FM 400 · Ивент 214</span><span>Лист 03 / 18</span></div>
         <div class="sheet-grid" id="sheet"></div>
         <span class="note" aria-hidden="true">это вы ×3</span>
+      </div>
       </div>
     </div>
   </section>
@@ -275,6 +309,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 
 
   <section class="band" id="how">
     <div class="wrap">
+      <div class="drift" id="drift" aria-hidden="true"></div>
       <div class="sec-head">
         <p class="kicker">Как это работает</p>
         <h2>Три шага от QR до фото у гостя</h2>
@@ -373,20 +408,21 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 
 
   <section class="band alt" id="pricing">
     <div class="wrap">
-      <div class="sec-head"><p class="kicker">Тарифы</p><h2>Платите за мероприятие, а не за подписку</h2><p class="lead">Цена зависит от числа гостей. Возможности одинаковые во всех тарифах.</p></div>
+      <div class="sec-head"><p class="kicker">Тарифы</p><h2>Платите за мероприятие, а не за подписку</h2><p class="lead">Оплата заранее, по числу гостей, которое вы называете до мероприятия. Возможности одинаковые во всех тарифах.</p></div>
       <div class="plans">
-        <div class="plan"><span class="tag">Старт</span><span class="price">2 900 ₽</span><span class="guests">до 30 гостей</span></div>
-        <div class="plan"><span class="tag">Базовый</span><span class="price">4 900 ₽</span><span class="guests">30–60 гостей</span></div>
-        <div class="plan"><span class="tag">Стандарт</span><span class="price">7 900 ₽</span><span class="guests">60–90 гостей</span></div>
-        <div class="plan"><span class="tag">Бизнес</span><span class="price">10 900 ₽</span><span class="guests">90–120 гостей</span></div>
-        <div class="plan custom"><div><span class="tag">Индивидуально</span><p>120+ гостей и серии мероприятий — цена по запросу.</p></div><a class="btn" href="#contact">Обсудить условия</a></div>
+        <div class="plan"><span class="tag">Старт</span><span class="price">4 400 ₽</span><span class="guests">до 30 гостей</span><span class="first">первое мероприятие — 2 200 ₽</span></div>
+        <div class="plan"><span class="tag">Базовый</span><span class="price">6 400 ₽</span><span class="guests">31–60 гостей</span><span class="first">первое мероприятие — 3 200 ₽</span></div>
+        <div class="plan"><span class="tag">Стандарт</span><span class="price">9 400 ₽</span><span class="guests">61–90 гостей</span><span class="first">первое мероприятие — 4 700 ₽</span></div>
+        <div class="plan"><span class="tag">Бизнес</span><span class="price">12 400 ₽</span><span class="guests">91–120 гостей</span><span class="first">первое мероприятие — 6 200 ₽</span></div>
+        <div class="plan custom"><div><span class="tag">Индивидуально</span><p>Больше 120 гостей и серии мероприятий — по договорённости.</p></div><a class="btn" href="#contact">Обсудить условия</a></div>
       </div>
+      <p class="pay-note">Пришло меньше гостей — цена не меняется. Пришло больше — доплачиваете разницу до следующего тарифа прямо во время мероприятия. Оплата переводом, по счёту или через СБП.</p>
       <ul class="incl">
         <li>Бот с вашим названием и приветствием</li><li>QR-код для площадки</li><li>Поиск по лицу, выдача только своих фото</li><li>HEIC и JPEG</li><li>Согласие, автоудаление, серверы в РФ</li><li>Статистика выдачи</li><li>Помощь с настройкой</li>
       </ul>
       <div class="pilot">
-        <div><h3>Первое мероприятие бесплатно</h3><p>Проведём пилот на вашем реальном мероприятии и покажем статистику: сколько гостей получили фото.</p></div>
-        <a class="btn primary" href="#contact">Забронировать пилот <span class="arr">→</span></a>
+        <div><h3>Первое мероприятие −50%</h3><p>Первое мероприятие каждого клиента — за полцены: от 2 200 ₽. После него покажем статистику: сколько гостей получили фото.</p></div>
+        <a class="btn primary" href="#contact">Рассчитать стоимость <span class="arr">→</span></a>
       </div>
     </div>
   </section>
@@ -402,6 +438,8 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 
         <details><summary>Что если у гостя нет Telegram?</summary><p>Через бота он фото не получит. Для таких гостей остаётся обычный способ: ссылка на альбом или отправка вручную.</p></details>
         <details><summary>Где хранятся фото и данные гостей?</summary><p>Фото — на вашем Яндекс Диске. Селфи не сохраняется. Шаблон лица хранится на серверах в РФ и удаляется через 30 дней или по команде /delete_me.</p></details>
         <details><summary>Что если гости придут с селфи все разом?</summary><p>Запросы встают в очередь. В пик, например сразу после объявления со сцены, часть гостей подождёт дольше обычного. QR на столах распределяет поток лучше, чем один экран.</p></details>
+        <details><summary>Что если гостей придёт меньше или больше?</summary><p>Вы платите заранее за то число гостей, которое назвали. Пришло меньше — цена не меняется. Пришло больше — доплачиваете разницу между тарифами прямо во время мероприятия, бот продолжает работать.</p></details>
+        <details><summary>Как оплатить?</summary><p>Переводом, по счёту или через СБП — до мероприятия. Чек из «Мой налог».</p></details>
         <details><summary>Что нужно от нас?</summary><p>Яндекс Диск с папкой мероприятия и полчаса на настройку перед первым мероприятием. Бота и QR готовим мы.</p></details>
       </div>
     </div>
@@ -410,10 +448,11 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 
   <section class="band alt final" id="contact">
     <div class="wrap">
       <div class="sec-head" style="margin-bottom:0">
-        <p class="kicker">Пилот</p>
-        <h2>Проведите первое мероприятие бесплатно</h2>
-        <p class="lead">Настроим бота под ваше имя, дадим QR и будем на связи в день мероприятия. После — статистика: сколько гостей получили фото.</p>
-        <div class="cta-row"><a class="btn primary" href="https://t.me/kenbud" target="_blank" rel="noopener">Забронировать пилот в Telegram <span class="arr">↗</span></a>
+        <p class="kicker">Как начать</p>
+        <h2>Первое мероприятие — со скидкой 50%</h2>
+        <ol class="flow"><li>Заявка</li><li>Число гостей</li><li>Оплата: перевод, счёт или СБП</li><li>Бот под вашим брендом и QR</li><li>Мероприятие</li></ol>
+        <p class="lead">Будем на связи в день мероприятия. После — статистика: сколько гостей получили фото.</p>
+        <div class="cta-row"><a class="btn primary" href="https://t.me/kenbud" target="_blank" rel="noopener">Обсудить мероприятие в Telegram <span class="arr">↗</span></a>
           <a class="btn" href="https://t.me/FotoMatchTest_bot" target="_blank" rel="noopener">Сначала попробовать демо-бота</a></div>
       </div>
       <div class="contacts">
@@ -476,7 +515,57 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 
   for(var a=0;a<6;a++) album+=print(a+3,spots[a]);
   document.getElementById('album').innerHTML=album;
 
+  // Floating prints in #how (decorative).
+  var drift=document.getElementById('drift');
+  if(drift){
+    var DP=[{i:7,w:130,x:150,y:4,z:-60,r:6,d:.10},{i:4,w:118,x:12,y:40,z:-140,r:-7,d:.05},{i:2,w:136,x:78,y:96,z:20,r:-2,d:.12,g:{x:62,y:28,s:.95}},{i:9,w:96,x:206,y:150,z:-200,r:9,d:.03}];
+    drift.innerHTML=DP.map(function(p){return '<div class="dp" data-d="'+p.d+'" style="--w:'+p.w+'px;--x:'+p.x+'px;--y:'+p.y+'px;--z:'+p.z+'px;--r:'+p.r+'deg">'+print(p.i,p.g)+(p.g?ring:'')+'</div>';}).join('');
+  }
+
   var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce){
+    // Pointer tilt on the hero contact sheet (fine pointers only, max 6deg).
+    var sheet=document.querySelector('.sheet'),hero=document.querySelector('.hero');
+    if(sheet&&hero&&window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+      var tx=0,ty=0,tq=false;
+      hero.addEventListener('pointermove',function(e){
+        var r=sheet.getBoundingClientRect();
+        tx=Math.max(-1,Math.min(1,(e.clientX-(r.left+r.width/2))/(r.width/2+200)));
+        ty=Math.max(-1,Math.min(1,(e.clientY-(r.top+r.height/2))/(r.height/2+200)));
+        if(!tq){tq=true;requestAnimationFrame(function(){tq=false;sheet.style.setProperty('--ry',(tx*6).toFixed(2)+'deg');sheet.style.setProperty('--rx',(-ty*6).toFixed(2)+'deg');});}
+      },{passive:true});
+      hero.addEventListener('pointerleave',function(){sheet.style.setProperty('--rx','0deg');sheet.style.setProperty('--ry','0deg');},{passive:true});
+    }
+    // Scroll parallax for the floating prints.
+    if(drift){
+      var dps=[].slice.call(drift.querySelectorAll('.dp')),sec=document.getElementById('how'),pq=false;
+      var par=function(){pq=false;if(drift.offsetParent===null)return;var r=sec.getBoundingClientRect(),vh=window.innerHeight;if(r.bottom<0||r.top>vh)return;
+        var off=(r.top+r.height/2)-vh/2;dps.forEach(function(el){el.style.setProperty('--py',Math.max(-28,Math.min(28,off*+el.getAttribute('data-d'))).toFixed(1)+'px');});};
+      var onScroll=function(){if(!pq){pq=true;requestAnimationFrame(par);}};
+      window.addEventListener('scroll',onScroll,{passive:true});
+      window.addEventListener('resize',onScroll,{passive:true});
+      par();
+    }
+    // Scroll reveal (classes are added only by JS, so content stays visible without it).
+    if('IntersectionObserver' in window){
+      var groups=['.band .sec-head','.steps','.aside-note','.points','.who','.tbl','.sec-list','.plans','.pay-note','.incl','.pilot','.faq details','.contacts','.promo figure'];
+      var items=[];
+      groups.forEach(function(sel){
+        [].slice.call(document.querySelectorAll(sel)).forEach(function(g){
+          var kids=g.matches('.sec-head,.steps,.points,.who,.sec-list,.plans,.contacts')?[].slice.call(g.children):[g];
+          kids.forEach(function(k,j){if(k.classList.contains('rv'))return;k.classList.add('rv');k.style.setProperty('--d',(Math.min(j,6)*0.08)+'s');items.push(k);});
+        });
+      });
+      document.documentElement.classList.add('js-motion');
+      var io=new IntersectionObserver(function(es){
+        es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;io.unobserve(el);el.classList.add('in');
+          // Drop reveal classes afterwards so hover transitions are not delayed.
+          setTimeout(function(){el.classList.remove('rv','in');el.style.removeProperty('--d');},1600);});
+      },{rootMargin:'0px 0px -8% 0px',threshold:.08});
+      items.forEach(function(el){io.observe(el);});
+    }
+  }
+
   if(reduce||!('IntersectionObserver' in window)) return;
   var msgs=[].slice.call(document.querySelectorAll('#msgs .msg')),yes=document.getElementById('yes'),bar=document.getElementById('bar'),prog=document.getElementById('prog');
   var timers=[],running=false;
